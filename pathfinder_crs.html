@@ -1,0 +1,174 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="ICanHaz.min.js" ></script>
+<style type="text/css">
+body, table, tr, td
+{
+	font-family:Verdana;
+	font-size:14px;
+}
+div.Weapon
+{
+	width:450px;
+	overflow:auto;
+	margin-bottom: 0.5em;
+}
+div.WeaponTitle
+{
+	font-weight:bold;
+	font-size:larger;
+	background-color:lightgrey;
+	text-align:center;
+	margin-bottom: 0.1em;
+}
+span.WeaponLeft
+{
+	float:left;
+	font-size:larger;
+}
+span.WeaponRight
+{
+	float:right;
+	text-align:right;
+}
+span.WeaponAttack
+{
+	font-weight:bold;
+}
+span.WeaponDamage
+{
+	font-weight:bold;
+}
+</style>
+
+<script id="AllAttacks" type="text/html">
+{{#all_attacks}}
+<div class="Weapon">
+	<div class="WeaponTitle">{{title}}</div>
+	<span class="WeaponLeft">
+		{{#attacks}}
+			{{melee_ranged}}: <span class="WeaponAttack">{{attack}}</span>, <span class="WeaponDamage">{{damage}}</span><br/>
+		{{/attacks}}
+	</span>
+	<span class="WeaponRight">
+		{{#crit}}Crit: {{crit}}{{/crit}}<br/>
+		{{#range}}Rng: {{range}}<br/>{{/range}}
+		{{#type}}{{type}}<br/>{{/type}}
+	</span>
+</div>
+{{/all_attacks}}
+</script>
+
+<script>
+var format_attacks = function(al) {
+	var result = [];
+	for (a in al) {
+		result.push("+" + al[a]);
+	}
+	return result.join("/");
+}
+
+var view = {
+	all_attacks: [
+		{
+			title: "Light crossbow",
+			attacks: [
+				{
+					melee_ranged: "Ranged",
+					attack: format_attacks([3]),
+					damage: function() {
+						return "1d8";
+					},
+				},
+				{
+					melee_ranged: "Ranged, Both Hands",
+					attack: format_attacks([5]),
+					damage: function() {
+						return "1d8";
+					},
+				},
+			],
+			crit: '19-20/x2',
+			range: "80'",
+			type: ['2-Hand', 'P'].join(', '),
+		},
+		{
+			title: "Masterwork Kama",
+			attacks: [
+				{
+					melee_ranged: "Mainhand",
+					attack: format_attacks([9]),
+					damage: function() {
+						return "1d6+5";
+					},
+				},
+				{
+					melee_ranged: "Flurry",
+					attack: format_attacks([8, 8]),
+					damage: function() {
+						return "1d6+5";
+					},
+				},
+			],
+			crit: 'x2',
+			type: ['Light', 'S', 'Monk', 'Trip'].join(', ')
+		},
+		{
+			title: "Shuriken",
+			attacks: [
+				{
+					melee_ranged: "Ranged",
+					attack: format_attacks([5]),
+					damage: function() {
+						return "1d2+5";
+					},
+				},
+				{
+					melee_ranged: "Ranged Flurry",
+					attack: format_attacks([4, 4]),
+					damage: function() {
+						return "1d2+5";
+					},
+				},
+			],
+			crit: 'x2',
+			range: "10'",
+			type: ['Light', 'P', 'Monk'].join(', ')
+		},
+		{
+			title: "Unarmed strike",
+			attacks: [
+				{
+					melee_ranged: "Mainhand",
+					attack: format_attacks([8]),
+					damage: function() {
+						return "1d8+5";
+					},
+				},
+				{
+					melee_ranged: "Flurry",
+					attack: format_attacks([7, 7]),
+					damage: function() {
+						return "1d8+5";
+					},
+				},
+			],
+			crit: 'x2',
+			type: ['Light', 'B', 'Nonlethal'].join(', ')
+		},
+	]
+};
+
+var render = function()
+{
+	$('body').html(ich.AllAttacks(view));
+}
+
+$(function() {
+	render();
+});
+</script>
+</head>
+<body></body>
+</html>
