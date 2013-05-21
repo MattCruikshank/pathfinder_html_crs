@@ -61,108 +61,112 @@ span.WeaponDamage
 </script>
 
 <script>
-var format_attacks = function(al) {
-	var result = [];
-	for (a in al) {
-		result.push("+" + al[a]);
-	}
-	return result.join("/");
-}
-
-var view = {
-	all_attacks: [
-		{
-			title: "Light crossbow",
-			attacks: [
-				{
-					melee_ranged: "Ranged",
-					attack: format_attacks([3]),
-					damage: function() {
-						return "1d8";
-					},
-				},
-				{
-					melee_ranged: "Ranged, Both Hands",
-					attack: format_attacks([5]),
-					damage: function() {
-						return "1d8";
-					},
-				},
-			],
-			crit: '19-20/x2',
-			range: "80'",
-			type: ['2-Hand', 'P'].join(', '),
-		},
-		{
-			title: "Masterwork Kama",
-			attacks: [
-				{
-					melee_ranged: "Mainhand",
-					attack: format_attacks([9]),
-					damage: function() {
-						return "1d6+5";
-					},
-				},
-				{
-					melee_ranged: "Flurry",
-					attack: format_attacks([8, 8]),
-					damage: function() {
-						return "1d6+5";
-					},
-				},
-			],
-			crit: 'x2',
-			type: ['Light', 'S', 'Monk', 'Trip'].join(', ')
-		},
-		{
-			title: "Shuriken",
-			attacks: [
-				{
-					melee_ranged: "Ranged",
-					attack: format_attacks([5]),
-					damage: function() {
-						return "1d2+5";
-					},
-				},
-				{
-					melee_ranged: "Ranged Flurry",
-					attack: format_attacks([4, 4]),
-					damage: function() {
-						return "1d2+5";
-					},
-				},
-			],
-			crit: 'x2',
-			range: "10'",
-			type: ['Light', 'P', 'Monk'].join(', ')
-		},
-		{
-			title: "Unarmed strike",
-			attacks: [
-				{
-					melee_ranged: "Mainhand",
-					attack: format_attacks([8]),
-					damage: function() {
-						return "1d8+5";
-					},
-				},
-				{
-					melee_ranged: "Flurry",
-					attack: format_attacks([7, 7]),
-					damage: function() {
-						return "1d8+5";
-					},
-				},
-			],
-			crit: 'x2',
-			type: ['Light', 'B', 'Nonlethal'].join(', ')
-		},
-	]
-};
-
 var render = function()
 {
-	$('body').html(ich.AllAttacks(view));
+	var format_attacks = function(al) {
+
+		var atkm = parseInt(document.getElementById('atkmod').value) || 0;
+		var dmgm = parseInt(document.getElementById('dmgmod').value) || 0;
+
+		var result = [];
+		for (a in al) {
+			result.push("+" + (al[a] + atkm));
+		}
+		return result.join("/");
+	}
+
+	var view = {
+		all_attacks: [
+			{
+				title: "Light crossbow",
+				attacks: [
+					{
+						melee_ranged: "Ranged",
+						attack: format_attacks([3]),
+						damage: function() {
+							return "1d8";
+						},
+					},
+					{
+						melee_ranged: "Ranged, Both Hands",
+						attack: format_attacks([5]),
+						damage: function() {
+							return "1d8";
+						},
+					},
+				],
+				crit: '19-20/x2',
+				range: "80'",
+				type: ['2-Hand', 'P'].join(', '),
+			},
+			{
+				title: "Masterwork Kama",
+				attacks: [
+					{
+						melee_ranged: "Mainhand",
+						attack: format_attacks([9]),
+						damage: function() {
+							return "1d6+5";
+						},
+					},
+					{
+						melee_ranged: "Flurry",
+						attack: format_attacks([8, 8]),
+						damage: function() {
+							return "1d6+5";
+						},
+					},
+				],
+				crit: 'x2',
+				type: ['Light', 'S', 'Monk', 'Trip'].join(', ')
+			},
+			{
+				title: "Shuriken",
+				attacks: [
+					{
+						melee_ranged: "Ranged",
+						attack: format_attacks([5]),
+						damage: function() {
+							return "1d2+5";
+						},
+					},
+					{
+						melee_ranged: "Ranged Flurry",
+						attack: format_attacks([4, 4]),
+						damage: function() {
+							return "1d2+5";
+						},
+					},
+				],
+				crit: 'x2',
+				range: "10'",
+				type: ['Light', 'P', 'Monk'].join(', ')
+			},
+			{
+				title: "Unarmed strike",
+				attacks: [
+					{
+						melee_ranged: "Mainhand",
+						attack: format_attacks([8]),
+						damage: function() {
+							return "1d8+5";
+						},
+					},
+					{
+						melee_ranged: "Flurry",
+						attack: format_attacks([7, 7]),
+						damage: function() {
+							return "1d8+5";
+						},
+					},
+				],
+				crit: 'x2',
+				type: ['Light', 'B', 'Nonlethal'].join(', ')
+			},
+		]
+	};
+
+	$('#display').html(ich.AllAttacks(view));
 }
 
 $(function() {
@@ -170,5 +174,14 @@ $(function() {
 });
 </script>
 </head>
-<body></body>
+<body>
+
+<div id='allinputs'>
+	<input type='text' id='atkmod' size='7' onclick='render()' oninput='render()' />Attack Bonus
+	<input type='text' id='dmgmod' size='7' onclick='render()' oninput='render()' />Damage Bonus<br />
+</div><p/>
+
+<div id="display"></div>
+
+</body>
 </html>
